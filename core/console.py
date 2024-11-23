@@ -4,6 +4,7 @@ from core.constants import (
     BOOK,
     BOOK_ADD,
     BOOK_AUTHOR,
+    BOOK_DELETE,
     BOOK_GET,
     BOOK_ID,
     BOOK_INPUT,
@@ -68,6 +69,8 @@ class BookConsoleService(ConsoleService):
                 self.search_book()
             case '4':
                 self.change_status()
+            case '5':
+                self.delete_book()
 
     def add_book(self) -> None:
         title = self.input(BOOK_TITLE, TextFormat.BLUE)
@@ -126,6 +129,11 @@ class BookConsoleService(ConsoleService):
         book_dict = self.manager.udate(id, book)
         self.write(BOOK_UPDATE.format(**book_dict), TextFormat.GREEN)
 
+    def delete_book(self) -> None:
+        id = self.request_id()
+        book_dict = self.manager.delete(id)
+        self.write(BOOK_DELETE.format(**book_dict), TextFormat.GREEN)
+
     def act(self) -> None:
         self.write(GREETING, TextFormat.GREEN)
         while True:
@@ -134,5 +142,6 @@ class BookConsoleService(ConsoleService):
                 continue
             try:
                 self.handle_action(menu)
+                self.input('Нажмите любую кнопку для продолжения', TextFormat.YELLOW)
             except (ValueError, IDErorr) as e:
                 self.write('\n%s\n' % str(e), TextFormat.RED)

@@ -67,3 +67,9 @@ BOOK_UPDATE = (
 '''
     + BOOK
 )
+BOOK_DELETE = (
+    '''
+Книга удалена:
+'''
+    + BOOK
+)
