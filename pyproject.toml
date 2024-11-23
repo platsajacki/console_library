@@ -25,14 +25,6 @@ E701 = 'multiple statements on one line (colon)'
 [tool.isort]
 profile = 'black'
 line_length = 120
-sections = [
-    'FUTURE',
-    'PYTEST',
-    'STDLIB',
-    'FIRSTPARTY',
-    'THIRDPARTY',
-    'LOCALFOLDER',
-]
 use_parentheses = true
 include_trailing_comma = true
 multi_line_output = 3

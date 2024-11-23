@@ -1,4 +1,5 @@
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from datetime import datetime
 from enum import Enum
 
 ModelDict = dict
@@ -28,10 +29,37 @@ class Book(Model):
     title: str
     author: str
     year: int
-    status: Status = Status.IN_STOCK
+    status: str = Status.IN_STOCK.value
 
     def __post_init__(self):
-        self.status = self.status.value
+        self.validate_fields()
+
+    def validate_fields(self):
+        self.validate_title()
+        self.validate_author()
+        self.validate_year()
+        self.validate_status()
+
+    def validate_title(self):
+        if not isinstance(self.title, str) or not self.title.strip():
+            raise ValueError(f'Поле `title` должно быть непустой строкой.\nПолучено: {self.title}')
+
+    def validate_author(self):
+        if not isinstance(self.author, str) or not self.author.strip():
+            raise ValueError(f'Поле `author` должно быть непустой строкой.\nПолучено: {self.author}')
+
+    def validate_year(self):
+        if not isinstance(self.year, int) or self.year < 0 or self.year > (year := datetime.now().year):
+            raise ValueError(f'Поле `year` должно быть целым числом в диапазоне 0-{year}.\nПолучено: {self.year}')
+
+    def validate_status(self):
+        try:
+            self.status = Status(self.status).value
+        except ValueError:
+            raise ValueError(
+                f'Поле `status` должно быть одним из значений: {[status.value for status in Status]}.'
+                f'\nПолучено: {self.status}'
+            )
 
 
 class TextFormat(Enum):

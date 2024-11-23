@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
 import sys
-from typing import Sequence, Any
+from abc import ABC, abstractmethod
+from typing import Any, Sequence
 
 from core.constants import GOOD_BAY
-from core.data_types import TextFormat, Model
+from core.data_types import Model, TextFormat
 
 
 class BaseService(ABC):
@@ -58,7 +58,7 @@ class ConsoleService(BaseService):
         text = self._get_fmt_text(data, text_format, bold)
         print(text)
 
-    def input(self, data: str, text_format: TextFormat = TextFormat.RESET, bold: bool = True) -> None:
+    def input(self, data: str, text_format: TextFormat = TextFormat.RESET, bold: bool = True) -> str:
         """Выводит данные в консоль с указанным цветом."""
         try:
             text = self._get_fmt_text(data, text_format, bold)
