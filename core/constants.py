@@ -1,13 +1,15 @@
+from core.data_types import Status
+
 GOOD_BAY = '\n\nДо скорой встречи!'
 
 GREETING = 'Добро пожаловать в "Консольную Библиотеку"\n'
 
-MENU = '''1. Добавление книги
+MENU = '''
+1. Добавление книги
 2. Отображение книг
 3. Поиск книги
 4. Изменение статуса книги
-5. Обновление книги
-6. Удаление книги
+5. Удаление книги
 '''
 MENU_GET_BOOK = '''
 1. Показать всю библиотеку
@@ -21,10 +23,16 @@ MENU_SEARCH_BOOK = f'''
 3. {SEARCH_DICT['3'][1]}
 '''
 
+STATUS_DICT = {'1': Status.IN_STOCK.value, '2': Status.GIVEN.value}
+MENU_STATUS_BOOK = f'''
+На какой статус изменить:
+1. {STATUS_DICT['1']}
+2. {STATUS_DICT['2']}
+'''
+
 MENU_BUTTON = 'Введите номер пункта меню: '
 
-ERORR_CHOISE = '\nНеверно выбран пункт меню.\n'
-ERORR_YEAR = '\nГод должен быть положительным числом.\n'
+ERORR_CHOISE = '\nНеверно выбран пункт меню.'
 
 BOOK_INPUT = '\nВведите {} книги: '
 BOOK_ID = BOOK_INPUT.format('ID')
@@ -51,4 +59,11 @@ BOOK_GET = (
 '''
     + BOOK
 )
+
 BOOK_LIST = '''| {id} | {title} | {author} | {year} | {status} |'''
+BOOK_UPDATE = (
+    '''
+Книга обновлена:
+'''
+    + BOOK
+)

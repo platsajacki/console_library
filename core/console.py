@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from core.constants import (
+    BOOK,
     BOOK_ADD,
     BOOK_AUTHOR,
     BOOK_GET,
@@ -8,15 +9,17 @@ from core.constants import (
     BOOK_INPUT,
     BOOK_LIST,
     BOOK_TITLE,
+    BOOK_UPDATE,
     BOOK_YEAR,
     ERORR_CHOISE,
-    ERORR_YEAR,
     GREETING,
     MENU,
     MENU_BUTTON,
     MENU_GET_BOOK,
     MENU_SEARCH_BOOK,
+    MENU_STATUS_BOOK,
     SEARCH_DICT,
+    STATUS_DICT,
 )
 from core.data_types import Book, ModelDict, TextFormat
 from core.exceptions import IDErorr
@@ -63,14 +66,13 @@ class BookConsoleService(ConsoleService):
                 self.handle_get_book_menu()
             case '3':
                 self.search_book()
+            case '4':
+                self.change_status()
 
     def add_book(self) -> None:
         title = self.input(BOOK_TITLE, TextFormat.BLUE)
         author = self.input(BOOK_AUTHOR, TextFormat.BLUE)
         year = self.input(BOOK_YEAR, TextFormat.BLUE)
-        if not year.isdigit():
-            self.write(ERORR_YEAR, TextFormat.RED)
-            return
         book = Book(title=title, author=author, year=int(year))
         book_dict = self.manager.create(book)
         if isinstance(book_dict, list):
@@ -78,6 +80,9 @@ class BookConsoleService(ConsoleService):
         self.write(BOOK_ADD.format(**book_dict), TextFormat.GREEN)
 
     def show_list(self, book_dicts: list[ModelDict]) -> None:
+        if not book_dicts:
+            self.write('\nПо вашему запросу ничего не найдено.', TextFormat.YELLOW)
+            return
         self.write('\nКниги:', TextFormat.GREEN)
         for book_dict in book_dicts:
             self.write(BOOK_LIST.format(**book_dict), TextFormat.GREEN)
@@ -87,10 +92,13 @@ class BookConsoleService(ConsoleService):
         book_dicts = self.manager.read_list()
         self.show_list(book_dicts)
 
-    def get_detail(self) -> None:
+    def request_id(self) -> int:
         str_id = self.input(BOOK_ID, TextFormat.BLUE)
-        int_id = self.get_intenger(str_id)
-        book_dict = self.manager.read_detail(int_id)
+        return self.get_intenger(str_id)
+
+    def get_detail(self) -> None:
+        id = self.request_id()
+        book_dict = self.manager.read_detail(id)
         self.write(BOOK_GET.format(**book_dict), TextFormat.GREEN)
 
     def search_book(self) -> None:
@@ -101,6 +109,22 @@ class BookConsoleService(ConsoleService):
         value = self.input(BOOK_INPUT.format(SEARCH_DICT[text][1].lower()), TextFormat.BLUE)
         book_dicts = self.manager.search(field, value)
         self.show_list(book_dicts)
+
+    def change_status(self) -> None:
+        id = self.request_id()
+        book_dict = self.manager.read_detail(id)
+        text = self.handle_menu(MENU_STATUS_BOOK)
+        if not text:
+            return
+        if STATUS_DICT[text] == book_dict['status']:
+            self.write('\nУ книги сейчас такой же статус.', TextFormat.GREEN)
+            self.write(BOOK.format(**book_dict), TextFormat.GREEN)
+            return
+        book_dict.pop('id')
+        book_dict.pop('status')
+        book = Book(status=STATUS_DICT[text], **book_dict)
+        book_dict = self.manager.udate(id, book)
+        self.write(BOOK_UPDATE.format(**book_dict), TextFormat.GREEN)
 
     def act(self) -> None:
         self.write(GREETING, TextFormat.GREEN)

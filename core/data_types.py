@@ -28,7 +28,7 @@ class Book(Model):
 
     title: str
     author: str
-    year: int
+    year: int | str
     status: str = Status.IN_STOCK.value
 
     def __post_init__(self):
@@ -49,8 +49,13 @@ class Book(Model):
             raise ValueError(f'Поле `author` должно быть непустой строкой.\nПолучено: {self.author}')
 
     def validate_year(self):
-        if not isinstance(self.year, int) or self.year < 0 or self.year > (year := datetime.now().year):
-            raise ValueError(f'Поле `year` должно быть целым числом в диапазоне 0-{year}.\nПолучено: {self.year}')
+        year = datetime.now().year
+        error = ValueError(f'Поле `year` должно быть целым числом в диапазоне 0-{year}.\nПолучено: {self.year}')
+        if not self.year.isdigit():
+            raise error
+        self.year = int(self.year)
+        if self.year < 0 or self.year > year:
+            raise error
 
     def validate_status(self):
         try:
