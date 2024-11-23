@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Sequence
 
 from core.data_types import Model, ModelDict
+from core.exceptions import IDErorr
 from core.interfaces import DataManager
 
 
@@ -63,6 +64,12 @@ class CSVDataManager(DataManager):
             writer.writeheader()
             writer.writerows(list(data.values()))
 
+    def _get_model_dict(self, id: int, data: dict[int, ModelDict]) -> ModelDict:
+        try:
+            return data[id]
+        except KeyError:
+            raise IDErorr(message=f'ID {id} не существует.')
+
     def create(self, data: Model | Sequence[Model]) -> ModelDict | list[ModelDict]:
         with open(self.path, mode='a') as file:
             writer = DictWriter(f=file, fieldnames=self.fields)
@@ -81,25 +88,26 @@ class CSVDataManager(DataManager):
         return list(self._read().values())
 
     def read_detail(self, id: int) -> ModelDict:
-        return self._read()[id]
+        return self._get_model_dict(id, self._read())
 
     def udate(self, id: int, data: Model) -> ModelDict:
         objects = self._read()
         model_data = {self.id_field: id} | data.to_dict()
+        self._get_model_dict(id, objects)
         objects[id] = model_data
         self._write(objects)
         return model_data
 
     def delete(self, id: int) -> ModelDict:
         objects = self._read()
-        obj = objects[id]
+        obj = self._get_model_dict(id, objects)
         del objects[id]
         self._write(objects)
         return obj
 
     def search(self, field: str, value: str) -> list[ModelDict]:
         if field not in self.fieldnames:
-            raise ValueError('Поля %s нет в файле.' % (field,))
+            raise ValueError('Поля %s нет в файле.' % field)
         objects = self.read_list()
         data = []
         for obj in objects:
