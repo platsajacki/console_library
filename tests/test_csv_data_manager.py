@@ -1,6 +1,6 @@
 import pytest
 
-from core.data_types import Book
+from core.data_types import Book, ModelDict
 from core.exceptions import IDErorr
 from core.managers import CSVDataManager
 
@@ -8,6 +8,7 @@ from core.managers import CSVDataManager
 def test_create_single_entry(csv_manager: CSVDataManager, book_model: Book):
     """Тест создания одной записи."""
     result = csv_manager.create(book_model)
+    assert isinstance(result, ModelDict)
     assert result['id'] == 1
     assert result['title'] == 'Test Book'
     assert result['author'] == 'Author 1'

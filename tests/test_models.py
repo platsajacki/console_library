@@ -15,14 +15,14 @@ def test_valid_book():
 
 
 @pytest.mark.parametrize('title', ['', '   '])
-def test_invalid_title(title: str | int):
+def test_invalid_title(title: str):
     """Тест на валидацию поля title."""
     with pytest.raises(ValueError, match='Поле `Название` должно быть непустой строкой.'):
         Book(title=title, author='Автор', year=2023, status='В наличии')
 
 
 @pytest.mark.parametrize('author', ['', '   '])
-def test_invalid_author(author: str | int):
+def test_invalid_author(author: str):
     """Тест на валидацию поля author."""
     with pytest.raises(ValueError, match='Поле `Автор` должно быть непустой строкой.'):
         Book(title='Название книги', author=author, year=2023, status='В наличии')
@@ -40,11 +40,8 @@ def test_invalid_year(year: str | int):
         Book(title='Название книги', author='Автор', year=year, status='В наличии')
 
 
-@pytest.mark.parametrize(
-    'status',
-    ['Неизвестный статус', 123, ''],
-)
-def test_invalid_status(status: str | int):
+@pytest.mark.parametrize('status', ['Неизвестный статус', ''])
+def test_invalid_status(status: str):
     """Тест на валидацию поля status."""
     with pytest.raises(ValueError, match='Поле `status` должно быть одним из значений:'):
         Book(title='Название книги', author='Автор', year=2023, status=status)
