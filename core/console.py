@@ -59,8 +59,8 @@ class BookConsoleService(ConsoleService):
             case '2':
                 self.get_detail()
 
-    def handle_action(self, menu: str) -> None:
-        match menu:
+    def handle_action(self, value: str) -> None:
+        match value:
             case '1':
                 self.add_book()
             case '2':

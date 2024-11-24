@@ -31,7 +31,7 @@ class Book(Model):
     year: int | str
     status: str = Status.IN_STOCK.value
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.validate_fields()
 
     def validate_fields(self):
@@ -40,24 +40,24 @@ class Book(Model):
         self.validate_year()
         self.validate_status()
 
-    def validate_title(self):
+    def validate_title(self) -> None:
         if not isinstance(self.title, str) or not self.title.strip():
-            raise ValueError(f'Поле `title` должно быть непустой строкой.\nПолучено: {self.title}')
+            raise ValueError(f'Поле `Название` должно быть непустой строкой.\nПолучено: {self.title}')
 
-    def validate_author(self):
+    def validate_author(self) -> None:
         if not isinstance(self.author, str) or not self.author.strip():
-            raise ValueError(f'Поле `author` должно быть непустой строкой.\nПолучено: {self.author}')
+            raise ValueError(f'Поле `Автор` должно быть непустой строкой.\nПолучено: {self.author}')
 
-    def validate_year(self):
+    def validate_year(self) -> None:
         year = datetime.now().year
-        error = ValueError(f'Поле `year` должно быть целым числом в диапазоне 0-{year}.\nПолучено: {self.year}')
-        if not self.year.isdigit():
+        error = ValueError(f'Поле `Год издания` должно быть целым числом в диапазоне 0-{year}.\nПолучено: {self.year}')
+        if isinstance(self.year, str) and not self.year.isdigit():
             raise error
         self.year = int(self.year)
         if self.year < 0 or self.year > year:
             raise error
 
-    def validate_status(self):
+    def validate_status(self) -> None:
         try:
             self.status = Status(self.status).value
         except ValueError:

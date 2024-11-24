@@ -29,3 +29,12 @@ use_parentheses = true
 include_trailing_comma = true
 multi_line_output = 3
 skip = ['venv']
+
+
+# Tests.
+[tool.pytest.ini_options]
+pythonpath = ["./"]
+norecursedirs = ["env/*", "venv/*"]
+addopts = ["-s", "-v", "-p", "no:cacheprovider"]
+testpaths = ["tests/"]
+python_files = ["test_*.py"]

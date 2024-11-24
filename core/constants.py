@@ -17,7 +17,7 @@ MENU_GET_BOOK = '''
 '''
 SEARCH_DICT = {'1': ('title', 'Название'), '2': ('author', 'Автор'), '3': ('year', 'Год издания')}
 MENU_SEARCH_BOOK = f'''
-Найти книгу по:
+Найти книгу по полю:
 1. {SEARCH_DICT['1'][1]}
 2. {SEARCH_DICT['2'][1]}
 3. {SEARCH_DICT['3'][1]}
@@ -59,7 +59,6 @@ BOOK_GET = (
 '''
     + BOOK
 )
-
 BOOK_LIST = '''| {id} | {title} | {author} | {year} | {status} |'''
 BOOK_UPDATE = (
     '''
