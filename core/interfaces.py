@@ -101,5 +101,5 @@ class DataManager(ABC):
 
     @abstractmethod
     def search(self, field: str, value: str) -> Any:
-        """Ищет объекты по отпределенному полю."""
+        """Ищет объекты по определенному полю."""
         return NotImplemented

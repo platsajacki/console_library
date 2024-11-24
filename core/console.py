@@ -33,7 +33,7 @@ class BookConsoleService(ConsoleService):
     manager: CSVDataManager
 
     def is_correct_menu_intenger(self, value: str, text: str) -> bool:
-        """Проверяет, что введен правильный вариант ответа int."""
+        """Проверяет, что введен правильный вариант ответа (int)."""
         return value in text and value.isdigit()
 
     def get_intenger(self, value: str) -> int:

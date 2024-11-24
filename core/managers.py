@@ -16,7 +16,7 @@ class CSVDataManager(DataManager):
     id_field: str = 'id'
 
     def __post_init__(self):
-        """Проверка, что файл является CSV."""
+        """Проверяем после создания эксземпляра класса, что файл существует и является CSV."""
         if not self._is_csv():
             raise ValueError(f'Файл {self.path} не является CSV файлом.')
         if not os.path.exists(self.path):
@@ -111,6 +111,6 @@ class CSVDataManager(DataManager):
         objects = self.read_list()
         data = []
         for obj in objects:
-            if obj[field] == value:
+            if value.lower() in obj[field].lower():
                 data.append(obj)
         return data
