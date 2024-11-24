@@ -116,6 +116,7 @@ class BookConsoleService(ConsoleService):
     def change_status(self) -> None:
         id = self.request_id()
         book_dict = self.manager.read_detail(id)
+        self.write(BOOK.format(**book_dict), TextFormat.GREEN)
         text = self.handle_menu(MENU_STATUS_BOOK)
         if not text:
             return

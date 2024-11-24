@@ -24,8 +24,7 @@ MENU_SEARCH_BOOK = f'''
 '''
 
 STATUS_DICT = {'1': Status.IN_STOCK.value, '2': Status.GIVEN.value}
-MENU_STATUS_BOOK = f'''
-На какой статус изменить:
+MENU_STATUS_BOOK = f'''На какой статус изменить:
 1. {STATUS_DICT['1']}
 2. {STATUS_DICT['2']}
 '''
